@@ -20,9 +20,8 @@
       #season { background: #90A4AE; font-weight: bold; }
       #season .col { min-height:300px; padding: 10px; font-size: 28px; }
       #season .links { text-align: left; }
-      #season .links a { text-decoration: none; font-style: italic; color: white; margin: 4px; padding: 4px 8px; }
+      #season .links a { word-break: break-all; font-size: 21px; text-decoration: none; font-style: italic; color: white; margin: 2px; padding: 2px 5px; }
       #season .spring { margin: 0 4px 4px 0; background: #64FFDA; color: #388E3C; }
-      #season .spring a { color: #388E3C; }
       #season .summer { margin: 0 0 4px 4px; background: #FF7043; color: #FFFFFF; }
       #season .autumn { margin: 4px 0 0 4px; background: #FFEB3B; color: #FFFFFF; }
       #season .winter { margin: 4px 4px 0 0; background: #80D8FF; color: #FFFFFF; }
@@ -51,10 +50,10 @@
     <!-- ------------------------------------------------------------------------ -->
     <div id="footer">
       <div>
-        <a href="https://github.com/VisoHu/visohu.github.io">GitHub</a>
-        <a href="https://v5.bootcss.com/docs/getting-started/introduction/">Bootstrap CSS</a>
-        <a href="https://zh-hans.reactjs.org/">React JS</a>
-        <a href="https://react-bootstrap.github.io/getting-started/introduction">React Bootstrap</a>
+        <a href="https://github.com/VisoHu/visohu.github.io" target="_top">GitHub</a>
+        <a href="https://v5.bootcss.com/docs/getting-started/introduction/" target="_blank">Bootstrap CSS</a>
+        <a href="https://zh-hans.reactjs.org/" target="_blank">React JS</a>
+        <a href="https://react-bootstrap.github.io/getting-started/introduction" target="_blank">React Bootstrap</a>
       </div>
       <div class="copyright">Copyright © 2022 Viso Hu. All rights reserved.</div>
     </div>
@@ -63,25 +62,44 @@
     <!-- ------------------------------------------------------------------------ -->
     <script type="text/babel">
       const seasons = [
-        { name: "Spring", links: [
-          { name: "Blog", url: "https://v.diidon.com/blog/", desc: "blog" },
+        { name: "Spring", colors: ["#D32F2F", "#388E3C", "#0288D1"], links: [
+          { tag: "", name: "Blog", url: "https://v.diidon.com/blog/", desc: "blog", target: "_top" },
+          { tag: "", name: "OSCHINA", url: "https://www.oschina.net/" },
+          { tag: "", name: "PM导航", url: "https://www.pmbaobao.com/" },
+          { tag: "", name: "游戏大观", url: "http://www.gamelook.com.cn/" },
         ] },
-        { name: "Summer", links: [
-          { name: "", url: "" },
+        { name: "Summer", colors: ["#FFFFFF", "#A5D6A7", "#B2FF59"], links: [
+          { tag: "", name: "Unity-Docs", url: "https://docs.unity3d.com/cn/current/Manual/class-State.html" },
+          { tag: "", name: "Creator-Docs", url: "https://docs.cocos.com/creator/2.0/manual/zh/" },
+          { tag: "", name: "Material-UI", url: "https://mui.com/zh/getting-started/usage/" },
+          { tag: "RN", name: "React-Native", url: "https://www.react-native.cn/docs/getting-started" },
+          { tag: "RN", name: "Expo", url: "https://docs.expo.dev/" },
+          { tag: "RN", name: "React-Navigation", url: "https://reactnavigation.org/docs/getting-started/" },
+          { tag: "RN", name: "NativeBase", url: "https://docs.nativebase.io/" },
+          { tag: "RN", name: "ReactNativeElements", url: "https://reactnativeelements.com/docs/" },
         ] },
-        { name: "Autumn", links: [
-          { name: "", url: "" },
+        { name: "Autumn", colors: ["#E53935", "#FFF000", "#000FFF"], links: [
+          { tag: "", name: "", url: "" },
         ] },
-        { name: "Winter", links: [
-          { name: "颜色选择器", url: "https://htmlcolorcodes.com/zh/" },
+        { name: "Winter", colors: ["#8D6E63", "#8E24AA", "#FFFFFF"], links: [
+          { tag: "", name: "颜色选择器", url: "https://htmlcolorcodes.com/zh/" },
         ] },
       ];
 
       function Season(props) {
         const season = props.season;
-        const links = season.links.map(link =>
-          <a href={link.url} title={link.desc}>{link.name}</a>
-        );
+        const links = season.links.map((link, i) => {
+          link._colorI = Math.trunc(Math.random() * season.colors.length);
+          if (i > 0) {
+            if (link.tag && link.tag == season.links[i - 1].tag) {
+              link._colorI = season.links[i - 1]._colorI;
+            } else {
+              link._colorI = (season.links[i - 1]._colorI + Math.trunc(Math.random() * (season.colors.length - 1)) + 1) % season.colors.length;
+            }
+          }
+          let style = { color: season.colors[link._colorI] };
+          return (<a style={style} href={link.url} title={link.desc} target={link.target ? link.target : "_blank"}>{link.name}</a>);
+        });
         return (
           <div>
             <p>{season.name}</p>
